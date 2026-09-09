@@ -1,0 +1,55 @@
+## --
+
+title: "Birds" output: html_notebook ---
+
+### Package Installation
+
+```{r include=FALSE}
+install.packages("tidyverse") # Tidyverse packages contain tools for data manipulation, cleaning, string parsing and visualization
+
+```
+
+### Reading all csv files
+
+```{r}
+library(readr) # for reading csvs  
+species <- read_csv("data/species.csv", show_col_types = FALSE)
+synonyms <- read_csv("data/synonyms.csv", show_col_types = FALSE)
+traits <- read_csv("data/traits.csv", show_col_types = FALSE)
+observation <- read_csv("data/observation.csv", show_col_types = FALSE)
+survey_header <- read_csv("data/header.csv", show_col_types = FALSE)
+location <- read_csv("data/location.csv", show_col_types = FALSE)
+```
+
+### Describe raw data
+
+```{r}
+## This section contains code to quickly look at what the data looks like: 
+  ## Table Row count 
+  ## Column Names 
+  ## Column Datatype 
+  ## Summary Statistics 
+  ## etc. 
+
+# Broken Down by Table 
+
+# 1. Species
+# Observation count 
+# Get all column names
+# Column datatypes 
+# Distinct values for any columns
+# Summarize 
+```
+
+### Perform any data manipulation here:
+
+```{r}
+## Rename table columns for convenience
+## Clean 
+```
+
+### Make new tables via joins
+
+### Data Analysis
+
+### Exploratory data analysis
