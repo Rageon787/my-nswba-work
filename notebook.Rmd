@@ -6,17 +6,17 @@ title: "Birds" output: html_notebook ---
 
 ```{r include=FALSE}
 install.packages("tidyverse") # Tidyverse packages contain tools for data manipulation, cleaning, string parsing and visualization
-
+library(tidyverse) 
 ```
 
 ### Reading all csv files
 
 ```{r}
-library(readr) # for reading csvs  
-species <- read_csv("data/species.csv", show_col_types = FALSE)
+library(data.table) # for reading csvs  
+species <- fread("data/899_Species.csv") 
 synonyms <- read_csv("data/synonyms.csv", show_col_types = FALSE)
 traits <- read_csv("data/traits.csv", show_col_types = FALSE)
-observation <- read_csv("data/observation.csv", show_col_types = FALSE)
+observation <- fread("data/observation.csv")
 survey_header <- read_csv("data/header.csv", show_col_types = FALSE)
 location <- read_csv("data/location.csv", show_col_types = FALSE)
 ```
@@ -31,24 +31,44 @@ location <- read_csv("data/location.csv", show_col_types = FALSE)
   ## Summary Statistics 
   ## etc. 
 
-# Broken Down by Table 
+# Choose the table you want: 
+chosen_table <- species
+                   
 
-# 1. Species
-# Observation count 
-# Get all column names
-# Column datatypes 
-# Distinct values for any columns
+nrow(chosen_table) # Observation count 
+colnames(chosen_table) # Get all column names
+# glimpse(chosen_table) # column datatypes
+# Distinct values for any columns you like
 # Summarize 
+
 ```
 
 ### Perform any data manipulation here:
 
+#### Renaming columns
+
 ```{r}
-## Rename table columns for convenience
-## Clean 
+library(data.table) 
+## Observation
+observation <- fread("data/observation.csv")
+setnames(observation, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"))   
+colnames(observation) 
+```
+
+```{r}
+
 ```
 
 ### Make new tables via joins
+
+##### Adding a column for species names
+
+```{r}
+
+```
+
+```         
+```
 
 ### Data Analysis
 
