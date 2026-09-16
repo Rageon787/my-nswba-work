@@ -61,7 +61,7 @@ colnames(observations)
 
 ```{r}
 # removing rejected records from observation table
-unique(observation$survey_quality)  
+unique(observations$survey_quality)  
 ```
 
 #### Species
@@ -88,7 +88,14 @@ colnames(locations)
 ##### Adding a column for species names
 
 ```{r}
+# make sure join keys are the same type (bit you before with DB_Code)
+species[, species_id := as.character(species_id)]
+observations[, species_id := as.character(species_id)]
 
+setkey(species, species_id)
+setkey(observations, species_id)
+
+result <- observations[species, on = "species_id"]
 ```
 
 ```         
