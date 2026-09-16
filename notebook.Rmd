@@ -52,9 +52,9 @@ colnames(chosen_table) # Get all column names
 ```{r}
 library(data.table) 
 ## Rename columns 
-observation <- fread("data/observation.csv")
-setnames(observation, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"))   
-colnames(observation) 
+observations <- fread("data/observation.csv")
+setnames(observations, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"))   
+colnames(observations) 
 ```
 
 ##### 2. Cleaning
@@ -74,8 +74,13 @@ setnames(species, old = c("spNo", "sName", "sciName","IOC_Species_ID", "species_
 colnames(species) 
 ```
 
-```{r}
+#### Locations
 
+```{r}
+locations <- fread("data/location.csv")
+colnames(locations)
+setnames(locations, old = c("bl_ID", "bl_Location", "bl_Lat", "bl_Lon", "region_Code", "header_Count", "Min_Alt", "Max_Alt"), new = c("location_id", "location_name", "latitude", "longitude", "region_code", "header_count", "min_altitude", "max_altitude"),  skip_absent = TRUE) 
+colnames(locations)
 ```
 
 ### Make new tables via joins
