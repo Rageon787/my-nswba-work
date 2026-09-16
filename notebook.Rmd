@@ -45,14 +45,33 @@ colnames(chosen_table) # Get all column names
 
 ### Perform any data manipulation here:
 
-#### Renaming columns
+#### Observation
+
+##### 1. Rename columns
 
 ```{r}
 library(data.table) 
-## Observation
+## Rename columns 
 observation <- fread("data/observation.csv")
 setnames(observation, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"))   
 colnames(observation) 
+```
+
+##### 2. Cleaning
+
+```{r}
+# removing rejected records from observation table
+unique(observation$survey_quality)  
+```
+
+#### Species
+
+##### 1. Rename species table 
+
+```{r}
+species <- fread("data/899_Species.csv")  
+setnames(species, old = c("spNo", "sName", "sciName","IOC_Species_ID", "species_Notes", "observation_Count"), new = c("species_id", "species_name", "species_sciname", "ioc_species_id", "species_notes", "observation_count"))  
+colnames(species) 
 ```
 
 ```{r}
@@ -70,6 +89,24 @@ colnames(observation)
 ```         
 ```
 
-### Data Analysis
+### Data Viz 
 
-### Exploratory data analysis
+##### Pie chart of Birds observed 
+
+```{r}
+library(ggplot2) 
+
+species_summary <- species[order(-observation_count)]
+
+# --- Option A: Pie chart, top N + "Other" ---
+top_n <- 5
+species_summary[, group := ifelse(.I <= top_n, species_name, "Other")]
+
+plot_data <- species_summary[, .(total_count = sum(observation_count)), by = group]
+
+ggplot(plot_data, aes(x = "", y = total_count, fill = group)) +
+  geom_col(width = 1) +
+  coord_polar(theta = "y") +
+  labs(title = "Observations by Species", fill = "Species") +
+  theme_void()
+```
