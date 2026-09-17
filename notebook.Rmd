@@ -5,20 +5,21 @@ title: "Birds" output: html_notebook ---
 ### Package Installation
 
 ```{r include=FALSE}
-install.packages("tidyverse") # Tidyverse packages contain tools for data manipulation, cleaning, string parsing and visualization
-library(tidyverse) 
+# Package installs 
+install.packages("tidyverse")  
+install.packages("data.table")
 ```
 
 ### Reading all csv files
 
 ```{r}
-library(data.table) # for reading csvs  
+library(data.table)
 species <- fread("data/899_Species.csv") 
-synonyms <- read_csv("data/synonyms.csv", show_col_types = FALSE)
-traits <- read_csv("data/traits.csv", show_col_types = FALSE)
+synonyms <- fread("data/synonyms.csv")
+traits <- fread("data/traits.csv")
 observation <- fread("data/observation.csv")
-survey_header <- read_csv("data/header.csv", show_col_types = FALSE)
-location <- read_csv("data/location.csv", show_col_types = FALSE)
+survey_header <- fread("data/header.csv")
+location <- fread("data/location.csv")
 ```
 
 ### Describe raw data
@@ -45,7 +46,7 @@ colnames(chosen_table) # Get all column names
 
 ### Perform any data manipulation here:
 
-#### Observation
+#### Observations Table 
 
 ##### 1. Rename columns
 
@@ -53,7 +54,7 @@ colnames(chosen_table) # Get all column names
 library(data.table) 
 ## Rename columns 
 observations <- fread("data/observation.csv")
-setnames(observations, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"))   
+setnames(observations, old = c("sd_ID", "sd_SpeciesORIG","sd_quality", "sd_Breeding"), new = c("survey_id","species_id", "survey_quality", "breeding_status"), skip_absent = TRUE)   
 colnames(observations) 
 ```
 
@@ -66,11 +67,11 @@ unique(observations$survey_quality)
 
 #### Species
 
-##### 1. Rename species table 
+##### 1. Rename species table
 
 ```{r}
 species <- fread("data/899_Species.csv")  
-setnames(species, old = c("spNo", "sName", "sciName","IOC_Species_ID", "species_Notes", "observation_Count"), new = c("species_id", "species_name", "species_sciname", "ioc_species_id", "species_notes", "observation_count"))  
+setnames(species, old = c("spNo", "sName", "sciName","IOC_Species_ID", "species_Notes", "observation_Count"), new = c("species_id", "species_name", "species_sciname", "ioc_species_id", "species_notes", "observation_count"), skip_absent = TRUE)   
 colnames(species) 
 ```
 
@@ -81,6 +82,18 @@ locations <- fread("data/location.csv")
 colnames(locations)
 setnames(locations, old = c("bl_ID", "bl_Location", "bl_Lat", "bl_Lon", "region_Code", "header_Count", "Min_Alt", "Max_Alt"), new = c("location_id", "location_name", "latitude", "longitude", "region_code", "header_count", "min_altitude", "max_altitude"),  skip_absent = TRUE) 
 colnames(locations)
+```
+
+#### Header Table 
+
+```{r}
+survey_header <- fread("data/header.csv")  
+
+old_names = c("s_ID", "s_Atlasser", "s_StartF", "s_DateL", "s_Latitude", "s_Longitude", "s_Locality", "k_Latitude", "k_Longitude", "observation_count", "s_Qualifier", "s_Notes")  
+new_names = c("survey_id", "survey_atlasser", "survey_start", "survey_end", "latitude", "longitude", "survey_location", "key_latitude", "key_longitude", "observation_count", "survey_qualifier", "survey_notes")
+setnames(survey_header, old_names, new_names, skip_absent = TRUE)  
+
+colnames(survey_header)
 ```
 
 ### Make new tables via joins
@@ -101,9 +114,9 @@ result <- observations[species, on = "species_id"]
 ```         
 ```
 
-### Data Viz 
+### Data Viz
 
-##### Pie chart of Birds observed 
+##### Pie chart of Birds observed
 
 ```{r}
 library(ggplot2) 
