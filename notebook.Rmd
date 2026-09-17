@@ -108,10 +108,18 @@ observations[, species_id := as.character(species_id)]
 setkey(species, species_id)
 setkey(observations, species_id)
 
-result <- observations[species, on = "species_id"]
+observations <- observations[species, on = "species_id"]
 ```
 
-```         
+```{r}
+# observations don't have any spatial information 
+# Survey header has lat, long, loc 
+
+setkey(observations, survey_id) 
+setkey(survey_header, survey_id) 
+
+observations <- observations[survey_header, on = "survey_id"] 
+colnames(observations)
 ```
 
 ### Data Viz
