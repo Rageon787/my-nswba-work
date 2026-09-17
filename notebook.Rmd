@@ -118,8 +118,12 @@ observations <- observations[species, on = "species_id"]
 setkey(observations, survey_id) 
 setkey(survey_header, survey_id) 
 
-observations <- observations[survey_header, on = "survey_id"] 
+observations <- observations[survey_header, on = "survey_id",.(survey_id, species_id, species_name, species_sciname, survey_location, key_latitude, key_longitude, survey_quality, survey_start, survey_end, confidence_Level, survey_notes)] 
 colnames(observations)
+```
+
+```{r}
+# using key_latitude, key_longitude, Left join locations on observations to get min alt and max alt. 
 ```
 
 ### Data Viz
