@@ -84,8 +84,7 @@ colnames(species)
 locations <- fread("data/location.csv")
 setnames(locations, old = c("bl_ID", "bl_Location", "bl_Lat", "bl_Lon", "region_Code", "header_Count", "Min_Alt", "Max_Alt"), new = c("location_id", "location_name", "latitude", "longitude", "region_code", "header_count", "min_altitude", "max_altitude"),  skip_absent = TRUE) 
 
-locations[, latitude := (latitude / 100) * -1] 
-locations[, longitude := longitude / 100]
+ 
 ```
 
 #### Header Table
@@ -98,8 +97,24 @@ new_names = c("survey_id", "survey_atlasser", "survey_start", "survey_end", "lat
 setnames(survey_header, old_names, new_names, skip_absent = TRUE)  
 
 # fix key_lat and key_longitude 
-survey_header[, key_latitude := -key_latitude / 100]
-survey_header[, key_longitude := key_longitude / 100]
+
+
+
+ddmm_to_decmial <- function(point, south = FALSE) {
+  degree <- point %/% 100 # whole degrees 
+  minute <- point %% 100 
+
+  
+  converted_point <- degree + (minute / 60) 
+  
+  # minutes 
+  if (south) -converted_point 
+  else converted_point
+}
+
+survey_header[, key_latitude := ddmm_to_decmial(key_latitude, TRUE)]
+survey_header[, key_longitude := ddmm_to_decmial(key_longitude, FALSE)] 
+
 
 colnames(survey_header)
 ```
@@ -135,5 +150,42 @@ colnames(observations)
 ##### Plot all bird observations on a single map
 
 ```{r}
-observations[, c('species_name','key_latitude', 'key_longitude')]
+bird_locations <- observations[, c('species_name','key_latitude', 'key_longitude')]
+bird_locations
+```
+
+```{r}
+library(data.table); library(ggplot2); library(ozmaps)
+
+bird_locations[, `:=`(key_latitude  = as.numeric(key_latitude),
+                      key_longitude = as.numeric(key_longitude))]
+
+nsw_x <- c(140.5, 164)
+nsw_y <- c(-37.7, -28)
+
+pts <- bird_locations[!is.na(key_latitude) & !is.na(key_longitude) &
+                        key_latitude  %between% nsw_y &
+                        key_longitude %between% nsw_x]
+
+sp   <- NULL   # set to NULL to map all species
+cell <- 0.1                  # grid size in degrees (~10 km)
+
+dat  <- if (is.null(sp)) pts else pts[species_name == sp]
+
+grid <- dat[, .(n = .N),
+            by = .(lon = floor(key_longitude / cell) * cell + cell / 2,
+                   lat = floor(key_latitude  / cell) * cell + cell / 2)]
+
+nsw_heat <- ggplot() +
+  geom_sf(data = ozmap_states, fill = "grey97", colour = NA) +
+  geom_tile(data = grid, aes(lon, lat, fill = n), width = cell, height = cell) +
+  geom_sf(data = ozmap_states, fill = NA, colour = "grey40", linewidth = 0.25) +
+  scale_fill_viridis_c(trans = "log10", option = "inferno", direction = -1,
+                       name = "Observations", labels = scales::comma) +
+  coord_sf(xlim = nsw_x, ylim = nsw_y) +
+  labs(title = if (is.null(sp)) "All observations, NSW" else sp) +
+  theme_void()
+
+nsw_heat
+ggsave("nsw_heatmap.png", nsw_heat, width = 9, height = 7, dpi = 300)
 ```
