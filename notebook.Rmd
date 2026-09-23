@@ -46,7 +46,7 @@ colnames(chosen_table) # Get all column names
 
 ### Perform any data manipulation here:
 
-#### Observations Table 
+#### Observations Table
 
 ##### 1. Rename columns
 
@@ -63,6 +63,7 @@ colnames(observations)
 ```{r}
 # removing rejected records from observation table
 unique(observations$survey_quality)  
+
 ```
 
 #### Species
@@ -75,16 +76,19 @@ setnames(species, old = c("spNo", "sName", "sciName","IOC_Species_ID", "species_
 colnames(species) 
 ```
 
+\
+
 #### Locations
 
 ```{r}
 locations <- fread("data/location.csv")
-colnames(locations)
 setnames(locations, old = c("bl_ID", "bl_Location", "bl_Lat", "bl_Lon", "region_Code", "header_Count", "Min_Alt", "Max_Alt"), new = c("location_id", "location_name", "latitude", "longitude", "region_code", "header_count", "min_altitude", "max_altitude"),  skip_absent = TRUE) 
-colnames(locations)
+
+locations[, latitude := (latitude / 100) * -1] 
+locations[, longitude := longitude / 100]
 ```
 
-#### Header Table 
+#### Header Table
 
 ```{r}
 survey_header <- fread("data/header.csv")  
@@ -92,6 +96,10 @@ survey_header <- fread("data/header.csv")
 old_names = c("s_ID", "s_Atlasser", "s_StartF", "s_DateL", "s_Latitude", "s_Longitude", "s_Locality", "k_Latitude", "k_Longitude", "observation_count", "s_Qualifier", "s_Notes")  
 new_names = c("survey_id", "survey_atlasser", "survey_start", "survey_end", "latitude", "longitude", "survey_location", "key_latitude", "key_longitude", "observation_count", "survey_qualifier", "survey_notes")
 setnames(survey_header, old_names, new_names, skip_absent = TRUE)  
+
+# fix key_lat and key_longitude 
+survey_header[, key_latitude := -key_latitude / 100]
+survey_header[, key_longitude := key_longitude / 100]
 
 colnames(survey_header)
 ```
@@ -122,28 +130,10 @@ observations <- observations[survey_header, on = "survey_id",.(survey_id, specie
 colnames(observations)
 ```
 
-```{r}
-# using key_latitude, key_longitude, Left join locations on observations to get min alt and max alt. 
-```
-
 ### Data Viz
 
-##### Pie chart of Birds observed
+##### Plot all bird observations on a single map
 
 ```{r}
-library(ggplot2) 
-
-species_summary <- species[order(-observation_count)]
-
-# --- Option A: Pie chart, top N + "Other" ---
-top_n <- 5
-species_summary[, group := ifelse(.I <= top_n, species_name, "Other")]
-
-plot_data <- species_summary[, .(total_count = sum(observation_count)), by = group]
-
-ggplot(plot_data, aes(x = "", y = total_count, fill = group)) +
-  geom_col(width = 1) +
-  coord_polar(theta = "y") +
-  labs(title = "Observations by Species", fill = "Species") +
-  theme_void()
+observations[, c('species_name','key_latitude', 'key_longitude')]
 ```
