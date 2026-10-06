@@ -63,5 +63,16 @@ datasets/
 *.parquet
 *.json
 
-# But allow tracking of small example/config files if needed:
-# !data/example.csv
+
+# Also keep images / graphs out of version control
+*.png
+outputs/
+
+
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/

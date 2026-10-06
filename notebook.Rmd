@@ -181,11 +181,29 @@ nsw_heat <- ggplot() +
   geom_tile(data = grid, aes(lon, lat, fill = n), width = cell, height = cell) +
   geom_sf(data = ozmap_states, fill = NA, colour = "grey40", linewidth = 0.25) +
   scale_fill_viridis_c(trans = "log10", option = "inferno", direction = -1,
-                       name = "Observations", labels = scales::comma) +
+                       name = "# of observations", labels = scales::comma) +
   coord_sf(xlim = nsw_x, ylim = nsw_y) +
-  labs(title = if (is.null(sp)) "All observations, NSW" else sp) +
+  labs(title = if (is.null(sp)) "Heatmap of Bird Observations in NSW" else sp) +
   theme_void()
 
 nsw_heat
-ggsave("nsw_heatmap.png", nsw_heat, width = 9, height = 7, dpi = 300)
+ggsave("nsw_heatmap.png", nsw_heat, width = 9, height = 7, dpi = 300, bg = "white")
+```
+
+### Endangered status of species
+
+```{r}
+nsw_birds <- species$species_sciname
+birds_with_traits <- traits$Scientific_Name
+length(intersect(nsw_birds, birds_with_traits))
+
+nsw_birds_with_traits <- species[traits, on = .(species_sciname == Scientific_Name), nomatch = NULL] 
+```
+
+```{r}
+unique(nsw_birds_with_traits$ALA_IUCN)
+status_freq <- nsw_birds_with_traits[, .N, by = ALA_IUCN]
+status_freq
+extinct_birds <- nsw_birds_with_traits[ALA_IUCN == "EN", .(species_sciname, ALA_IUCN)]
+extinct_birds
 ```
