@@ -67,6 +67,7 @@ datasets/
 # Also keep images / graphs out of version control
 *.png
 outputs/
+Graphs/
 
 
 
