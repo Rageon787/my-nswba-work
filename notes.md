@@ -97,4 +97,7 @@ $$
 
 ## Ideas for tomorrow:
 1. Reporting rates of bird species by trait.
-2. 
+2. Model  that takes into account rainfall.
+  - Rainfall distribution of NSW. 
+  - Reporting rate per location depends on rainfall in that region.  
+3. 
