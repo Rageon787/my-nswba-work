@@ -90,3 +90,11 @@ $$
 $$
 Y_i = beta_{ij} + beta{ij} * traits_j
 $$
+
+2. 
+
+
+
+## Ideas for tomorrow:
+1. Reporting rates of bird species by trait.
+2. 
