@@ -1,23 +1,25 @@
-## DES Notes 
-- Number of observations in the DES Data  
-- As this data is more recent, compare reporting rates to pre-2020 surveys 
-- Are there any previously reported species missing in the DES data. 
-- Where are the DES reports concentrated. 
-- Isolate and analyze interesting / popular species 
-- The des data has region codes
-- It's an xslx file but the first table has everything we need to know about each survey. 
-- 
+# Notes:
+
+## Infrastructure:
+
+1) Python notebook presentation:
+
+- Generating the presentation
+```bash
+  jupyter nbconvert birds_python.ipynb --to slides --no-input --post serve
+```
+
+- Opening the presentation
+```
+open birds_python.slide.html
+```
+
+2)
 
 
+## Statistics
 
-### Regions 
-- There are 9 regions in the dataset identified by a code.  
-- What are the significance of these regions?  
-- Rename the regions from codes to their actual names. 
-
-
-
-# Ragav's Research questions  
+### Ragav's Research questions  
 
 - Spatial range-shift type maps. Such as where the Rock Warbler was found in 1960 against where it was found in 2010. 
 
@@ -50,7 +52,9 @@
             - Low rainfall 
             - Moderate rainfall
             - High rainfall
-        
+
+
+### Mixed Effects Modelling: 
 
 
 
@@ -58,8 +62,3 @@
 
 
 
-## Endangered Species 
-
-1. King Island Brown Thornbill
-    - **Scientefic Name:**   
-    - **Bird type:** *small* insect eating bird 
