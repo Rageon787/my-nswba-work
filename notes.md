@@ -91,7 +91,10 @@ $$
 Y_i = beta_{ij} + beta{ij} * traits_j
 $$
 
-2. 
+
+
+2. Logistic Regression 
+- Predicts if something is True or False   
 
 
 
@@ -100,4 +103,23 @@ $$
 2. Model  that takes into account rainfall.
   - Rainfall distribution of NSW. 
   - Reporting rate per location depends on rainfall in that region.  
-3. 
+
+
+- Does rainfall affect reporting rates in a region?
+  - Look at the rainfall distribution in all of NSW per year.
+  - See if rainfall is correlated to the reporting rates in that region for that year.
+
+```
+reporting_rate ~ rainfall
+```
+
+### SILO Data for rainfalll
+
+#### About the data:
+1. SILO (Queensland Government), the easiest to start with. SILO is a database of Australian climate data from 1889 to the present, freely available under a CC BY 4.0 licence. Its gridded datasets are about 5 km × 5 km and come in NetCDF and GeoTiff formats. The NetCDF files are arranged one per year, and the monthly rainfall file holds 12 monthly grids. That means you’d download roughly 60 files, one per year from 1960–2019, which is very manageable. There’s no registration needed for the gridded files. One caveat: SILO says its data aren’t intended for climate change detection, because station changes can create small artificial shifts. You’re using rainfall as a covariate, not detecting climate change, so that’s fine; mention it in limitations.
+
+Use this link to make a curl request to fetch the data:
+
+https://s3-ap-southeast-2.amazonaws.com/silo-open-data/Official/annual/monthly_rain/<year>.monthly_rain.nc
+
+For example, put 1960 in place of <year> and paste the link into a browser to download that year’s file. To get all 60 years, loop over the years with curl or Python’s urllib. 
