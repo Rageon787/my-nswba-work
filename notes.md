@@ -91,23 +91,34 @@ $$
 Y_i = beta_{ij} + beta{ij} * traits_j
 $$
 
+2. Logistic Regression
 
-
-2. Logistic Regression 
-- Predicts if something is True or False   
-
-
+- Predicts if something is True or False
 
 ## Ideas for tomorrow:
-1. Reporting rates of bird species by trait.
-2. Model  that takes into account rainfall.
-  - Rainfall distribution of NSW. 
-  - Reporting rate per location depends on rainfall in that region.  
 
+1. Reporting rates of bird species by trait.
+2. Model that takes into account rainfall.
+
+- Rainfall distribution of NSW.
+- Reporting rate per location depends on rainfall in that region.
 
 - Does rainfall affect reporting rates in a region?
   - Look at the rainfall distribution in all of NSW per year.
   - See if rainfall is correlated to the reporting rates in that region for that year.
+
+### Feedback for rainfall
+
+- Look at birds on a case by case basis
+- Indirect relationship
+  - Food
+
+- El nino, southern oscillation index
+
+- Diets of birds species can be more influential
+- Look at fluctuations in the data. Then relate it to weather.
+- story of Passenger pigeon
+-
 
 ```
 reporting_rate ~ rainfall
@@ -116,10 +127,45 @@ reporting_rate ~ rainfall
 ### SILO Data for rainfalll
 
 #### About the data:
+
 1. SILO (Queensland Government), the easiest to start with. SILO is a database of Australian climate data from 1889 to the present, freely available under a CC BY 4.0 licence. Its gridded datasets are about 5 km × 5 km and come in NetCDF and GeoTiff formats. The NetCDF files are arranged one per year, and the monthly rainfall file holds 12 monthly grids. That means you’d download roughly 60 files, one per year from 1960–2019, which is very manageable. There’s no registration needed for the gridded files. One caveat: SILO says its data aren’t intended for climate change detection, because station changes can create small artificial shifts. You’re using rainfall as a covariate, not detecting climate change, so that’s fine; mention it in limitations.
 
 Use this link to make a curl request to fetch the data:
 
 https://s3-ap-southeast-2.amazonaws.com/silo-open-data/Official/annual/monthly_rain/<year>.monthly_rain.nc
 
-For example, put 1960 in place of <year> and paste the link into a browser to download that year’s file. To get all 60 years, loop over the years with curl or Python’s urllib. 
+For example, put 1960 in place of <year> and paste the link into a browser to download that year’s file. To get all 60 years, loop over the years with curl or Python’s urllib.
+
+## Feedback
+
+- Need to check if the filter for small birds is working.
+- Check calculation for reporting rate of bird species
+- Fix the heatmap to include data till 2026.
+
+## Project log on 26th October 2026 (I wrote this while flying from SG to Sydney)
+
+- I have started a powerpoint presentation for tomorrow's submission.
+- The major issue is i don't have any good graphs to submit tomorrow.
+- So I'm going to use my time this flight for ideation and generate all the graphs tomorrow.
+
+
+- Feedback from last meeting include:
+  - Generating graphs to include bird sighting records till 2025
+  - Verifying if the python notebooks filters out non-small bird species.
+
+  - Dorothy suggested that we compare two time blocks: 1987 - 2006 vs 2007 to now.
+    - 1) I look at the number of records from 1987 to 2006 vs 2007 to now.
+    - 2) Are there any years that stand out from the rest (More observaitons).
+
+
+
+- A list of things to do on this flight:
+  - Data story and presentation 
+    - Craft a data story;
+    - Most people in the audience will have no idea about bird species. 
+    - So maybe it would be good to briefly what this bird does and why it's important. 
+    - The information about birds will act as a hook. 
+ 
+  - Currently I only have graphs summarizing the observations: where they are found? what are the different bird species? But this is only useful if you have information. 
+
+  - Assume you don't have any information about birds, the goal is to get people interested about the topic. Maybe we could it tie into why birds matter. 
